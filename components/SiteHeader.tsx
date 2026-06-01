@@ -17,8 +17,11 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
       }
     >
       <nav className={`mx-auto flex max-w-7xl items-center justify-between px-5 py-5 ${overlay ? "text-white" : "text-canopy"}`}>
-        <Link href="/" className="font-serif text-2xl font-semibold">
-          ANRF
+        <Link href="/" className="flex flex-col leading-none">
+          <span className="font-serif text-2xl font-semibold">ANRF</span>
+          <span className={`mt-1 hidden text-[10px] font-bold uppercase tracking-[0.18em] md:block ${overlay ? "text-linen/75" : "text-canopy/65"}`}>
+            Aranya Niran Rosewood Foundation
+          </span>
         </Link>
         <div className="hidden gap-7 text-xs font-bold uppercase tracking-widest md:flex">
           {links.map((link) => (

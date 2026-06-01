@@ -19,7 +19,11 @@ export default async function Home() {
     ...homePageFallback,
     ...(fetchedContent || {}),
   };
-  const settings = await sanityFetch<typeof siteSettingsFallback | null>(siteSettingsQuery, {}, siteSettingsFallback);
+  const fetchedSettings = await sanityFetch<typeof siteSettingsFallback | null>(siteSettingsQuery, {}, siteSettingsFallback);
+  const settings = {
+    ...siteSettingsFallback,
+    ...(fetchedSettings || {}),
+  };
   const impacts = content.impact?.length ? content.impact : impactFallback;
 
   return (
@@ -142,7 +146,9 @@ export default async function Home() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Link
-              href={settings?.youtubeUrl || "#"}
+              href={settings.youtubeUrl}
+              target="_blank"
+              rel="noreferrer"
               className="flex min-h-44 flex-col justify-between border border-canopy/15 bg-linen p-6 text-canopy"
             >
               <Youtube size={34} />
@@ -152,7 +158,9 @@ export default async function Home() {
               </div>
             </Link>
             <Link
-              href={settings?.instagramUrl || "#"}
+              href={settings.instagramUrl}
+              target="_blank"
+              rel="noreferrer"
               className="flex min-h-44 flex-col justify-between border border-canopy/15 bg-linen p-6 text-canopy"
             >
               <Instagram size={34} />

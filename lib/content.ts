@@ -40,6 +40,6 @@ export const impactFallback = [
 ];
 
 export const siteSettingsFallback = {
-  youtubeUrl: "",
-  instagramUrl: "",
+  youtubeUrl: "https://www.youtube.com/channel/UC8XItbqN1YjizVAoo6MaAlw",
+  instagramUrl: "https://www.instagram.com/thearanyaniran/",
 };

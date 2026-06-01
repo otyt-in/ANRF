@@ -25,7 +25,7 @@
 - [ ] Rewrite Rosewood Conservation and Social Support pages.
 - [ ] Add real contact details.
 - [ ] Add documentation/blog/video/photo story content model examples.
-- [ ] Add final YouTube and Instagram URLs.
+- [x] Add final YouTube and Instagram URLs.
 - [ ] Decide between simple social links, latest-video embed, or curated CMS-managed social highlights.
 
 ## SEO
