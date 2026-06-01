@@ -1,9 +1,12 @@
-import { NextStudio } from "next-sanity/studio";
-import config from "@/sanity.config";
 import { isSanityConfigured } from "@/lib/sanity";
 
-export default function StudioPlaceholderPage() {
+export default async function StudioPage() {
   if (isSanityConfigured) {
+    const [{ NextStudio }, { default: config }] = await Promise.all([
+      import("next-sanity/studio"),
+      import("@/sanity.config"),
+    ]);
+
     return <NextStudio config={config} />;
   }
 

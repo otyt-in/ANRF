@@ -2,10 +2,10 @@ import { createClient } from "next-sanity";
 
 export const sanityProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 export const sanityDataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
-export const isSanityConfigured = Boolean(sanityProjectId && sanityProjectId !== "replace-me");
+export const isSanityConfigured = Boolean(sanityProjectId && sanityProjectId !== "placeholder");
 
 export const sanityClient = createClient({
-  projectId: sanityProjectId || "replace-me",
+  projectId: sanityProjectId || "placeholder",
   dataset: sanityDataset,
   apiVersion: "2026-06-01",
   useCdn: true,
