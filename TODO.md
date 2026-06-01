@@ -6,10 +6,14 @@
 - [x] Add shared header and footer across public pages.
 - [x] Add page-to-page CTAs so visitors are guided through the site.
 - [ ] Create initial Sanity documents: Site Settings, Home Page and starter Stories.
+- [ ] Fix Codex GitHub plugin access to private `otyt-in/ANRF` repository.
+- [x] Add YouTube/Instagram link fields to Sanity site settings.
+- [x] Add homepage social/media section.
 
 ## Brand
 
 - [ ] Add ANRF logo when available.
+- [ ] Add Naya Nari logo when available.
 - [ ] Finalize color palette after logo review.
 - [ ] Finalize typography after brand review.
 - [ ] Replace temporary Unsplash imagery with ANRF field photos/video stills.
@@ -21,6 +25,8 @@
 - [ ] Rewrite Rosewood Conservation and Social Support pages.
 - [ ] Add real contact details.
 - [ ] Add documentation/blog/video/photo story content model examples.
+- [ ] Add final YouTube and Instagram URLs.
+- [ ] Decide between simple social links, latest-video embed, or curated CMS-managed social highlights.
 
 ## SEO
 

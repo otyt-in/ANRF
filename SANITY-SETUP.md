@@ -32,3 +32,7 @@ After `/studio` opens, create:
 3. A few `Story` documents
 
 The website has fallback content, so it still works before these documents exist.
+
+## Social Links
+
+Add YouTube and Instagram links in `Site Settings` when ready. These will feed the homepage social section.

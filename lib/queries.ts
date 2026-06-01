@@ -23,3 +23,8 @@ export const storyBySlugQuery = `*[_type == "story" && slug.current == $slug][0]
   excerpt,
   body
 }`;
+
+export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
+  youtubeUrl,
+  instagramUrl
+}`;

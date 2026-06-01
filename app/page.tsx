@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Instagram, Play, Youtube } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { homePageFallback, impactFallback, stories } from "@/lib/content";
-import { homePageQuery } from "@/lib/queries";
+import { homePageFallback, impactFallback, siteSettingsFallback, stories } from "@/lib/content";
+import { homePageQuery, siteSettingsQuery } from "@/lib/queries";
 import { sanityFetch } from "@/lib/sanity";
 
 type HomePageContent = typeof homePageFallback & {
@@ -19,6 +19,7 @@ export default async function Home() {
     ...homePageFallback,
     ...(fetchedContent || {}),
   };
+  const settings = await sanityFetch<typeof siteSettingsFallback | null>(siteSettingsQuery, {}, siteSettingsFallback);
   const impacts = content.impact?.length ? content.impact : impactFallback;
 
   return (
@@ -126,6 +127,40 @@ export default async function Home() {
             <p className="mt-6 text-lg leading-8 text-linen/80">
               {content.videoText}
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white px-5 py-20">
+        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[0.75fr_1.25fr] md:items-end">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-clay">Follow the field</p>
+            <h2 className="mt-4 font-serif text-5xl leading-none text-canopy">Let video and social updates carry the living story.</h2>
+            <p className="mt-5 text-base leading-7 text-ink/70">
+              YouTube can host longer films and field documentation. Instagram can carry quick visual updates from planting, nursery work, exhibitions and Naya Nari.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Link
+              href={settings?.youtubeUrl || "#"}
+              className="flex min-h-44 flex-col justify-between border border-canopy/15 bg-linen p-6 text-canopy"
+            >
+              <Youtube size={34} />
+              <div>
+                <h3 className="font-serif text-3xl">YouTube</h3>
+                <p className="mt-2 text-sm leading-6 text-ink/65">Films, interviews and field documentation.</p>
+              </div>
+            </Link>
+            <Link
+              href={settings?.instagramUrl || "#"}
+              className="flex min-h-44 flex-col justify-between border border-canopy/15 bg-linen p-6 text-canopy"
+            >
+              <Instagram size={34} />
+              <div>
+                <h3 className="font-serif text-3xl">Instagram</h3>
+                <p className="mt-2 text-sm leading-6 text-ink/65">Photos, reels, exhibitions and quick updates.</p>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

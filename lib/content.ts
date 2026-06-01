@@ -38,3 +38,8 @@ export const impactFallback = [
   { value: "2", label: "Forest pilot plots identified" },
   { value: "1", label: "Women-led initiative growing" },
 ];
+
+export const siteSettingsFallback = {
+  youtubeUrl: "",
+  instagramUrl: "",
+};
