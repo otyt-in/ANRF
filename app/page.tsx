@@ -9,10 +9,14 @@ type HomePageContent = typeof homePageFallback & {
 };
 
 export default async function Home() {
-  const content = await sanityFetch<HomePageContent>(homePageQuery, {}, {
+  const fetchedContent = await sanityFetch<HomePageContent | null>(homePageQuery, {}, {
     ...homePageFallback,
     impact: impactFallback,
   });
+  const content: HomePageContent = {
+    ...homePageFallback,
+    ...(fetchedContent || {}),
+  };
   const impacts = content.impact?.length ? content.impact : impactFallback;
 
   return (

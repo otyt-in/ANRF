@@ -10,7 +10,8 @@ type Story = (typeof stories)[number] & {
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const fallback = stories.find((item) => item.slug === slug) as Story | undefined;
-  const story = await sanityFetch<Story | undefined>(storyBySlugQuery, { slug }, fallback);
+  const fetchedStory = await sanityFetch<Story | null | undefined>(storyBySlugQuery, { slug }, fallback);
+  const story = fetchedStory || fallback;
 
   if (!story) {
     notFound();

@@ -4,7 +4,8 @@ import { storiesQuery } from "@/lib/queries";
 import { sanityFetch } from "@/lib/sanity";
 
 export default async function StoriesPage() {
-  const storyItems = await sanityFetch<typeof stories>(storiesQuery, {}, stories);
+  const fetchedStories = await sanityFetch<typeof stories | null>(storiesQuery, {}, stories);
+  const storyItems = fetchedStories?.length ? fetchedStories : stories;
 
   return (
     <main className="bg-white px-5 py-24">
