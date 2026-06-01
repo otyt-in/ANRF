@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
+import { NextStepCta } from "@/components/NextStepCta";
+import { PageShell } from "@/components/PageShell";
+
+export const metadata: Metadata = {
+  title: "Rosewood Conservation",
+  description: "ANRF's work to conserve East Indian Rosewood through planting, nursery development, pilot plots and documentation.",
+};
+
 export default function RosewoodConservationPage() {
   return (
-    <main className="bg-linen">
+    <PageShell>
+      <main className="bg-linen">
       <section className="bg-canopy px-5 py-24 text-white">
         <div className="mx-auto max-w-5xl">
           <p className="text-sm uppercase tracking-[0.24em] text-linen/70">Rosewood conservation</p>
@@ -19,6 +29,14 @@ export default function RosewoodConservationPage() {
           </article>
         ))}
       </section>
-    </main>
+      <NextStepCta
+        eyebrow="Documentation"
+        title="This work needs field notes, images and repeatable guidance."
+        text="The Stories section will hold project updates, regeneration documentation, videos and photo essays."
+        href="/stories"
+        label="Go to stories"
+      />
+      </main>
+    </PageShell>
   );
 }

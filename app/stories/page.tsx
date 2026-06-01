@@ -1,14 +1,23 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { NextStepCta } from "@/components/NextStepCta";
+import { PageShell } from "@/components/PageShell";
 import { stories } from "@/lib/content";
 import { storiesQuery } from "@/lib/queries";
 import { sanityFetch } from "@/lib/sanity";
+
+export const metadata: Metadata = {
+  title: "Stories",
+  description: "Read ANRF blogs, documentation, field notes, photo stories and video updates.",
+};
 
 export default async function StoriesPage() {
   const fetchedStories = await sanityFetch<typeof stories | null>(storiesQuery, {}, stories);
   const storyItems = fetchedStories?.length ? fetchedStories : stories;
 
   return (
-    <main className="bg-white px-5 py-24">
+    <PageShell>
+      <main className="bg-white px-5 py-24">
       <div className="mx-auto max-w-6xl">
         <p className="text-sm uppercase tracking-[0.24em] text-clay">Stories</p>
         <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-tight text-canopy md:text-6xl">Blogs, documentation, photo stories and videos.</h1>
@@ -22,6 +31,14 @@ export default async function StoriesPage() {
           ))}
         </div>
       </div>
-    </main>
+      </main>
+      <NextStepCta
+        eyebrow="Contact"
+        title="Have a collaboration, documentation or media question?"
+        text="Use the contact page as the simple next step while the CMS content grows."
+        href="/contact"
+        label="Contact ANRF"
+      />
+    </PageShell>
   );
 }

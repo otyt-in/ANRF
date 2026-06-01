@@ -1,8 +1,17 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { NextStepCta } from "@/components/NextStepCta";
+import { PageShell } from "@/components/PageShell";
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "Learn about ANRF's origin, East Indian Rosewood conservation focus and work near Sanavalli, Mundgod, Karnataka.",
+};
 
 export default function AboutPage() {
   return (
-    <main className="bg-linen">
+    <PageShell>
+      <main className="bg-linen">
       <section className="bg-canopy px-5 py-24 text-white">
         <div className="mx-auto max-w-5xl">
           <p className="text-sm uppercase tracking-[0.24em] text-linen/70">About us</p>
@@ -27,6 +36,14 @@ export default function AboutPage() {
           <Link href="/work" className="inline-flex border border-canopy px-5 py-3 text-sm font-semibold text-canopy">See what we do</Link>
         </div>
       </section>
-    </main>
+      <NextStepCta
+        eyebrow="Explore the work"
+        title="See how conservation and community support come together."
+        text="Move from the origin story into ANRF's two core work areas: rosewood conservation and Naya Nari."
+        href="/work"
+        label="What we do"
+      />
+      </main>
+    </PageShell>
   );
 }

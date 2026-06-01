@@ -1,5 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
+import { NextStepCta } from "@/components/NextStepCta";
+import { PageShell } from "@/components/PageShell";
+
+export const metadata: Metadata = {
+  title: "What We Do",
+  description: "Explore ANRF's rosewood conservation and rural social support work in Karnataka.",
+};
 
 const work = [
   {
@@ -16,7 +24,8 @@ const work = [
 
 export default function WorkPage() {
   return (
-    <main className="bg-white">
+    <PageShell>
+      <main className="bg-white">
       <section className="texture px-5 py-24">
         <div className="mx-auto max-w-6xl">
           <p className="text-sm uppercase tracking-[0.24em] text-clay">What we do</p>
@@ -34,6 +43,14 @@ export default function WorkPage() {
           </div>
         </div>
       </section>
-    </main>
+      <NextStepCta
+        eyebrow="Stories"
+        title="Follow field notes, documentation and media from the work."
+        text="Stories will become the main reading area for blogs, documentation, photo essays and videos."
+        href="/stories"
+        label="Read stories"
+      />
+      </main>
+    </PageShell>
   );
 }

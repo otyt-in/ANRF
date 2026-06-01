@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
 import { homePageFallback, impactFallback, stories } from "@/lib/content";
 import { homePageQuery } from "@/lib/queries";
 import { sanityFetch } from "@/lib/sanity";
@@ -21,18 +23,7 @@ export default async function Home() {
 
   return (
     <main>
-      <header className="fixed left-0 right-0 top-0 z-30 bg-gradient-to-b from-[#071611]/85 via-[#071611]/20 to-transparent">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 text-white">
-          <Link href="/" className="font-serif text-2xl">ANRF</Link>
-          <div className="hidden gap-7 text-xs font-bold uppercase tracking-widest md:flex">
-            <Link href="/about">About</Link>
-            <Link href="/work">What We Do</Link>
-            <Link href="/stories">Stories</Link>
-            <Link href="/contact">Contact</Link>
-          </div>
-        </nav>
-      </header>
-
+      <SiteHeader overlay />
       <section className="relative min-h-[94vh] overflow-hidden bg-[#071611] text-white">
         <div className="absolute inset-0 scale-[1.02] bg-[url('https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=2200&q=82')] bg-cover bg-center opacity-75" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,22,17,.96),rgba(16,45,34,.58)_44%,rgba(7,22,17,.1)),linear-gradient(0deg,rgba(7,22,17,.98),transparent_42%)]" />
@@ -156,6 +147,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }
