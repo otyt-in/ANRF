@@ -1,0 +1,24 @@
+import { defineField, defineType } from "sanity";
+
+export const story = defineType({
+  name: "story",
+  title: "Story",
+  type: "document",
+  fields: [
+    defineField({ name: "title", title: "Title", type: "string", validation: (Rule) => Rule.required() }),
+    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title" }, validation: (Rule) => Rule.required() }),
+    defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+      options: {
+        list: ["Blog", "Documentation", "Field update", "Photo story", "Video", "Announcement"],
+      },
+    }),
+    defineField({ name: "excerpt", title: "Excerpt", type: "text", rows: 3 }),
+    defineField({ name: "coverImage", title: "Cover image", type: "image", options: { hotspot: true } }),
+    defineField({ name: "publishedAt", title: "Published at", type: "datetime" }),
+    defineField({ name: "videoUrl", title: "Video URL", type: "url" }),
+    defineField({ name: "body", title: "Body", type: "array", of: [{ type: "block" }, { type: "image", options: { hotspot: true } }] }),
+  ],
+});
