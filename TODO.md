@@ -9,6 +9,8 @@
 - [ ] Fix Codex GitHub plugin access to private `otyt-in/ANRF` repository.
 - [x] Add YouTube/Instagram link fields to Sanity site settings.
 - [x] Add homepage social/media section.
+- [x] Connect homepage Stories section to Sanity stories.
+- [x] Connect homepage featured video URL to Sanity Home Page document.
 
 ## Brand
 

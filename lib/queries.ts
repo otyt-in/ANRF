@@ -6,6 +6,7 @@ export const homePageQuery = `*[_type == "homePage"][0]{
   longViewText,
   videoTitle,
   videoText,
+  featuredVideoUrl,
   "impact": impact[]{value, label}
 }`;
 

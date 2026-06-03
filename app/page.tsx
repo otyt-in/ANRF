@@ -3,8 +3,9 @@ import { ArrowRight, Instagram, Play, Youtube } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { homePageFallback, impactFallback, siteSettingsFallback, stories } from "@/lib/content";
-import { homePageQuery, siteSettingsQuery } from "@/lib/queries";
+import { homePageQuery, siteSettingsQuery, storiesQuery } from "@/lib/queries";
 import { sanityFetch } from "@/lib/sanity";
+import { getYouTubeEmbedUrl } from "@/lib/video";
 
 type HomePageContent = typeof homePageFallback & {
   impact?: Array<{ value: string; label: string }>;
@@ -24,7 +25,10 @@ export default async function Home() {
     ...siteSettingsFallback,
     ...(fetchedSettings || {}),
   };
+  const fetchedStories = await sanityFetch<typeof stories | null>(storiesQuery, {}, stories);
+  const storyItems = fetchedStories?.length ? fetchedStories : stories;
   const impacts = content.impact?.length ? content.impact : impactFallback;
+  const featuredVideoEmbedUrl = getYouTubeEmbedUrl(content.featuredVideoUrl);
 
   return (
     <main>
@@ -118,10 +122,25 @@ export default async function Home() {
       <section className="bg-[#071611] px-5 py-24 text-white">
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="relative aspect-video overflow-hidden bg-black shadow-2xl shadow-black/40">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=82')] bg-cover bg-center opacity-80" />
-            <div className="absolute inset-0 grid place-items-center">
-              <div className="grid h-20 w-20 place-items-center rounded-full bg-linen text-canopy">
-                <Play fill="currentColor" size={30} />
+            {featuredVideoEmbedUrl ? (
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={featuredVideoEmbedUrl}
+                title="ANRF featured video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=82')] bg-cover bg-center opacity-80" />
+                <div className="absolute inset-0 grid place-items-center">
+                  <div className="grid h-20 w-20 place-items-center rounded-full bg-linen text-canopy">
+                    <Play fill="currentColor" size={30} />
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
               </div>
             </div>
           </div>
@@ -180,7 +199,7 @@ export default async function Home() {
             <h2 className="mt-4 font-serif text-5xl leading-none text-canopy md:text-6xl">A content hub for blogs, field notes, documents and media.</h2>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
-            {stories.slice(0, 3).map((story) => (
+            {storyItems.slice(0, 3).map((story) => (
               <Link key={story.slug} href={`/stories/${story.slug}`} className="border border-canopy/15 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
                 <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-moss">{story.category}</p>
                 <h3 className="mt-4 font-serif text-2xl leading-tight text-canopy">{story.title}</h3>

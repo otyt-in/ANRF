@@ -30,6 +30,7 @@ export const homePageFallback = {
   videoTitle: "Show the field, not just the mission.",
   videoText:
     "The homepage is prepared for your ANRF film. Later, Sanity can control the video URL, poster image and supporting copy.",
+  featuredVideoUrl: "",
 };
 
 export const impactFallback = [
