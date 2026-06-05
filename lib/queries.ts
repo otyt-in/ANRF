@@ -7,6 +7,12 @@ export const homePageQuery = `*[_type == "homePage"][0]{
   videoTitle,
   videoText,
   featuredVideoUrl,
+  heroImage,
+  workBackgroundImage,
+  rosewoodImage,
+  socialSupportImage,
+  longViewImage,
+  videoPosterImage,
   "impact": impact[]{value, label}
 }`;
 

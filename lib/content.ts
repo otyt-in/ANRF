@@ -31,6 +31,21 @@ export const homePageFallback = {
   videoText:
     "The homepage is prepared for your ANRF film. Later, Sanity can control the video URL, poster image and supporting copy.",
   featuredVideoUrl: "",
+  heroImage: null,
+  workBackgroundImage: null,
+  rosewoodImage: null,
+  socialSupportImage: null,
+  longViewImage: null,
+  videoPosterImage: null,
+};
+
+export const imageFallbacks = {
+  heroImage: "https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=2200&q=82",
+  workBackgroundImage: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=82",
+  rosewoodImage: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=82",
+  socialSupportImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=82",
+  longViewImage: "https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78?auto=format&fit=crop&w=1200&q=82",
+  videoPosterImage: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=82",
 };
 
 export const impactFallback = [

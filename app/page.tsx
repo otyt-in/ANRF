@@ -2,7 +2,8 @@ import Link from "next/link";
 import { ArrowRight, Instagram, Play, Youtube } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { homePageFallback, impactFallback, siteSettingsFallback, stories } from "@/lib/content";
+import { homePageFallback, imageFallbacks, impactFallback, siteSettingsFallback, stories } from "@/lib/content";
+import { getImageUrl } from "@/lib/image";
 import { homePageQuery, siteSettingsQuery, storiesQuery } from "@/lib/queries";
 import { sanityFetch } from "@/lib/sanity";
 import { getYouTubeEmbedUrl } from "@/lib/video";
@@ -29,12 +30,18 @@ export default async function Home() {
   const storyItems = fetchedStories?.length ? fetchedStories : stories;
   const impacts = content.impact?.length ? content.impact : impactFallback;
   const featuredVideoEmbedUrl = getYouTubeEmbedUrl(content.featuredVideoUrl);
+  const heroImage = getImageUrl(content.heroImage, imageFallbacks.heroImage, 2200);
+  const workBackgroundImage = getImageUrl(content.workBackgroundImage, imageFallbacks.workBackgroundImage, 2200);
+  const rosewoodImage = getImageUrl(content.rosewoodImage, imageFallbacks.rosewoodImage, 1200);
+  const socialSupportImage = getImageUrl(content.socialSupportImage, imageFallbacks.socialSupportImage, 1200);
+  const longViewImage = getImageUrl(content.longViewImage, imageFallbacks.longViewImage, 1200);
+  const videoPosterImage = getImageUrl(content.videoPosterImage, imageFallbacks.videoPosterImage, 1600);
 
   return (
     <main>
       <SiteHeader overlay />
       <section className="relative min-h-[94vh] overflow-hidden bg-[#071611] text-white">
-        <div className="absolute inset-0 scale-[1.02] bg-[url('https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=2200&q=82')] bg-cover bg-center opacity-75" />
+        <div className="absolute inset-0 scale-[1.02] bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${heroImage})` }} />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,22,17,.96),rgba(16,45,34,.58)_44%,rgba(7,22,17,.1)),linear-gradient(0deg,rgba(7,22,17,.98),transparent_42%)]" />
         <div className="relative z-10 mx-auto grid min-h-[94vh] max-w-7xl items-end gap-12 px-5 pb-12 pt-28 lg:grid-cols-[1fr_360px]">
           <div>
@@ -84,14 +91,14 @@ export default async function Home() {
       </section>
 
       <section className="relative overflow-hidden bg-canopy px-5 py-24 text-white">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=82')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: `url(${workBackgroundImage})` }} />
         <div className="relative z-10 mx-auto max-w-7xl">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-linen/75">What we do</p>
           <h2 className="mt-4 max-w-4xl font-serif text-5xl leading-none md:text-6xl">Two threads, one foundation.</h2>
           <div className="mt-12 grid gap-5 lg:grid-cols-2">
             {[
-              ["Rosewood Conservation", "/work/rosewood-conservation", "Farmland planting, nursery care, pilot forest plots and documentation for East Indian Rosewood regeneration.", "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=82"],
-              ["Social Support", "/work/social-support", "Naya Nari supports women around Sanavalli through craft skills, exhibitions and alternative income pathways.", "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=82"],
+              ["Rosewood Conservation", "/work/rosewood-conservation", "Farmland planting, nursery care, pilot forest plots and documentation for East Indian Rosewood regeneration.", rosewoodImage],
+              ["Social Support", "/work/social-support", "Naya Nari supports women around Sanavalli through craft skills, exhibitions and alternative income pathways.", socialSupportImage],
             ].map(([title, href, copy, image]) => (
               <Link key={title} href={href} className="group relative flex min-h-[430px] overflow-hidden border border-white/20 p-8">
                 <div className="absolute inset-0 bg-cover bg-center opacity-75 transition duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${image})` }} />
@@ -108,7 +115,7 @@ export default async function Home() {
 
       <section className="bg-white px-5 py-24">
         <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="min-h-[440px] border-[18px] border-linen bg-[url('https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78?auto=format&fit=crop&w=1200&q=82')] bg-cover bg-center shadow-2xl shadow-canopy/20" />
+          <div className="min-h-[440px] border-[18px] border-linen bg-cover bg-center shadow-2xl shadow-canopy/20" style={{ backgroundImage: `url(${longViewImage})` }} />
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-clay">The long view</p>
             <h2 className="mt-4 font-serif text-5xl leading-none text-canopy md:text-6xl">{content.longViewTitle}</h2>
@@ -132,7 +139,7 @@ export default async function Home() {
               />
             ) : (
               <>
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=82')] bg-cover bg-center opacity-80" />
+                <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: `url(${videoPosterImage})` }} />
                 <div className="absolute inset-0 grid place-items-center">
                   <div className="grid h-20 w-20 place-items-center rounded-full bg-linen text-canopy">
                     <Play fill="currentColor" size={30} />

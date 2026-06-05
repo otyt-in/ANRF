@@ -11,6 +11,7 @@
 - [x] Add homepage social/media section.
 - [x] Connect homepage Stories section to Sanity stories.
 - [x] Connect homepage featured video URL to Sanity Home Page document.
+- [x] Connect core homepage images to Sanity Home Page document.
 
 ## Brand
 
