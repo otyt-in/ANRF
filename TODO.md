@@ -6,6 +6,7 @@
 - [x] Add shared header and footer across public pages.
 - [x] Add page-to-page CTAs so visitors are guided through the site.
 - [ ] Create initial Sanity documents: Site Settings, Home Page and starter Stories.
+- [ ] Add one-time Sanity content seeding script or GROQ import for current fallback content.
 - [ ] Fix Codex GitHub plugin access to private `otyt-in/ANRF` repository.
 - [x] Add YouTube/Instagram link fields to Sanity site settings.
 - [x] Add homepage social/media section.

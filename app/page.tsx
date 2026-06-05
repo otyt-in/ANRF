@@ -12,20 +12,28 @@ type HomePageContent = typeof homePageFallback & {
   impact?: Array<{ value: string; label: string }>;
 };
 
+function withFallback<T extends Record<string, unknown>>(fallback: T, content: Partial<T> | null | undefined): T {
+  const merged = { ...fallback };
+
+  for (const [key, value] of Object.entries(content || {})) {
+    if (value === null || value === undefined || value === "") {
+      continue;
+    }
+
+    merged[key as keyof T] = value as T[keyof T];
+  }
+
+  return merged;
+}
+
 export default async function Home() {
   const fetchedContent = await sanityFetch<HomePageContent | null>(homePageQuery, {}, {
     ...homePageFallback,
     impact: impactFallback,
   });
-  const content: HomePageContent = {
-    ...homePageFallback,
-    ...(fetchedContent || {}),
-  };
+  const content = withFallback<HomePageContent>(homePageFallback, fetchedContent || {});
   const fetchedSettings = await sanityFetch<typeof siteSettingsFallback | null>(siteSettingsQuery, {}, siteSettingsFallback);
-  const settings = {
-    ...siteSettingsFallback,
-    ...(fetchedSettings || {}),
-  };
+  const settings = withFallback(siteSettingsFallback, fetchedSettings || {});
   const fetchedStories = await sanityFetch<typeof stories | null>(storiesQuery, {}, stories);
   const storyItems = fetchedStories?.length ? fetchedStories : stories;
   const impacts = content.impact?.length ? content.impact : impactFallback;

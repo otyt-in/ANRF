@@ -33,6 +33,16 @@ After `/studio` opens, create:
 
 The website has fallback content, so it still works before these documents exist.
 
+If a field is blank, the website may continue using fallback text from code. This helps avoid accidentally erasing the current public copy while the CMS is still being filled in.
+
+## What Each Sanity Section Controls
+
+- `Site Settings`: global settings, currently social links and future contact/SEO details.
+- `Home Page`: homepage text, images, impact numbers and featured video.
+- `Story`: content for the Stories page and the three homepage story cards.
+
+The older `Page`, `Video` and `Document` types are hidden for now because they were future placeholders and not connected to visible pages yet.
+
 ## Editing Homepage Copy
 
 Open `/studio`, edit the `Home Page` document and publish.
