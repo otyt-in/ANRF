@@ -141,9 +141,6 @@ export default async function Home() {
               </>
             )}
           </div>
-              </div>
-            </div>
-          </div>
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-linen/75">Video</p>
             <h2 className="mt-4 font-serif text-5xl leading-none">{content.videoTitle}</h2>
