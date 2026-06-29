@@ -40,3 +40,5 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
 export const v2SiteSettingsQuery = `*[_type == "siteSettings"][0]`;
 export const v2NavigationQuery = `*[_type == "navigation"][0]`;
 export const v2FooterQuery = `*[_type == "footer"][0]`;
+
+export const v2HomePageQuery = `*[_type == "homePage"][0]{ sections }`;
