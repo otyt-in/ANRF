@@ -1,13 +1,12 @@
 import Link from "next/link";
+import { sanityFetch } from "@/lib/sanity";
+import { v2NavigationQuery } from "@/lib/queries";
 
-const links = [
-  { href: "/about", label: "About" },
-  { href: "/work", label: "What We Do" },
-  { href: "/stories", label: "Stories" },
-  { href: "/contact", label: "Contact" },
-];
+export async function SiteHeader({ overlay = false }: { overlay?: boolean }) {
+  // Fetch dynamic navigation links from Sanity
+  const navData = await sanityFetch<any>(v2NavigationQuery, {}, null);
+  const links = navData?.links || [];
 
-export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   return (
     <header
       className={
@@ -24,11 +23,16 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           </span>
         </Link>
         <div className="hidden gap-7 text-xs font-bold uppercase tracking-widest md:flex">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href}>
-              {link.label}
-            </Link>
-          ))}
+          {links.length > 0 ? (
+            links.map((link: any) => (
+              <Link key={link.href} href={link.href}>
+                {link.label}
+              </Link>
+            ))
+          ) : (
+            // Temporary fallback if Sanity is empty
+            <span className="opacity-50">Setup Navigation in CMS</span>
+          )}
         </div>
       </nav>
     </header>
