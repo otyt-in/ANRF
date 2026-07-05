@@ -52,17 +52,26 @@ export default async function Home() {
                       )}
                       {section.ctas && section.ctas.length > 0 && (
                         <div className="mt-9 flex flex-wrap gap-3">
-                          {section.ctas.map((cta: any, i: number) => (
-                            <Link 
-                              key={i} 
-                              href={cta.url || "#"} 
-                              className={`inline-flex min-h-12 items-center gap-2 px-6 text-xs font-extrabold uppercase tracking-widest ${
-                                cta.isPrimary ? "bg-linen text-canopy" : "border border-white/70 text-white hover:bg-white/10"
-                              }`}
-                            >
-                              {cta.label} {cta.isPrimary && <ArrowRight size={16} />}
-                            </Link>
-                          ))}
+                          {section.ctas && section.ctas.length > 0 && (
+                        <div className="mt-9 flex flex-wrap gap-3">
+                          {section.ctas.map((cta: any, i: number) => {
+                            const isExternal = cta.url?.startsWith("http");
+                            return (
+                              <Link 
+                                key={i} 
+                                href={cta.url || "#"} 
+                                target={isExternal ? "_blank" : undefined}
+                                rel={isExternal ? "noopener noreferrer" : undefined}
+                                className={`inline-flex min-h-12 items-center gap-2 px-6 text-xs font-extrabold uppercase tracking-widest ${
+                                  cta.isPrimary ? "bg-linen text-canopy" : "border border-white/70 text-white hover:bg-white/10"
+                                }`}
+                              >
+                                {cta.label} {cta.isPrimary && <ArrowRight size={16} />}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
                         </div>
                       )}
                     </div>

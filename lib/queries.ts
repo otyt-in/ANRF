@@ -44,3 +44,5 @@ export const v2FooterQuery = `*[_type == "footer"][0]`;
 export const v2HomePageQuery = `*[_type == "homePage"][0]{ sections }`;
 
 export const v2ProgrammesQuery = `*[_type == "programme"] | order(_createdAt asc) { title, "slug": slug.current, excerpt }`;
+
+export const v2ProgrammeBySlugQuery = `*[_type == "programme" && slug.current == $slug][0]`;

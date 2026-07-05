@@ -53,7 +53,7 @@ export default async function WorkPage() {
           <NextStepCta
             eyebrow="The Living Journal"
             title="Follow our day-to-day progress in the field."
-            text="We document sapling growth, nursery updates, and Naya Nari workshops directly on Instagram."
+            text="We document sapling growth, nursery updates, and community initiatives directly on Instagram."
             href={settings.instagramUrl}
             label="Open Instagram"
           />
