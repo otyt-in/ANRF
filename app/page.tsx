@@ -40,9 +40,12 @@ export default async function Home() {
                   <div className="absolute inset-0 scale-[1.02] bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgUrl})` }} />
                   <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,22,17,.96),rgba(16,45,34,.58)_44%,rgba(7,22,17,.1)),linear-gradient(0deg,rgba(7,22,17,.98),transparent_42%)]" />
                   
-                  {/* Fixed Spacing: Adjusted pt-32 to push text perfectly below absolute header */}
                   <div className="relative z-10 mx-auto grid min-h-[94vh] max-w-7xl items-end gap-12 px-5 pb-12 pt-32 lg:grid-cols-[1fr_360px]">
                     <div>
+                      {/* NEW: Render the Eyebrow/Location */}
+                      {section.kicker && (
+                        <p className="mb-5 text-xs font-extrabold uppercase tracking-[0.28em] text-linen/80">{section.kicker}</p>
+                      )}
                       <h1 className="max-w-5xl font-serif text-5xl leading-[0.98] md:text-8xl">{section.heading}</h1>
                       {section.subheading && (
                         <p className="mt-7 max-w-3xl text-lg leading-8 text-linen/90">{section.subheading}</p>
@@ -175,33 +178,20 @@ export default async function Home() {
 
             case "socialBlock":
                return (
-                <section key={section._key} className="bg-white px-5 py-20">
-                  <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[0.75fr_1.25fr] md:items-end">
-                    <div>
-                      {section.kicker && <p className="text-xs font-black uppercase tracking-[0.24em] text-clay">{section.kicker}</p>}
-                      <h2 className="mt-4 font-serif text-5xl leading-none text-canopy">{section.heading}</h2>
-                      {section.body && <p className="mt-5 text-base leading-7 text-ink/70">{section.body}</p>}
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      {settings?.youtubeUrl && (
-                        <Link href={settings.youtubeUrl} target="_blank" className="flex min-h-44 flex-col justify-between border border-canopy/15 bg-linen p-6 text-canopy hover:bg-canopy/5 transition">
-                          <Youtube size={34} />
-                          <div>
-                            <h3 className="font-serif text-3xl">YouTube</h3>
-                            <p className="mt-2 text-sm leading-6 text-ink/65">Films, interviews and field documentation.</p>
-                          </div>
+                <section key={section._key} className="bg-white px-5 py-24">
+                  <div className="mx-auto max-w-4xl text-center">
+                    {section.kicker && <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-clay">{section.kicker}</p>}
+                    <h2 className="font-serif text-5xl leading-none text-canopy">{section.heading}</h2>
+                    {section.body && <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-ink/75">{section.body}</p>}
+                    
+                    {settings?.instagramUrl && (
+                      <div className="mt-12">
+                        <Link href={settings.instagramUrl} target="_blank" className="inline-flex items-center gap-3 border border-canopy/20 bg-linen px-8 py-5 text-canopy transition hover:bg-canopy hover:text-linen">
+                          <Instagram size={24} />
+                          <span className="font-serif text-xl font-medium tracking-wide">Follow the Living Journal</span>
                         </Link>
-                      )}
-                      {settings?.instagramUrl && (
-                        <Link href={settings.instagramUrl} target="_blank" className="flex min-h-44 flex-col justify-between border border-canopy/15 bg-linen p-6 text-canopy hover:bg-canopy/5 transition">
-                          <Instagram size={34} />
-                          <div>
-                            <h3 className="font-serif text-3xl">Instagram</h3>
-                            <p className="mt-2 text-sm leading-6 text-ink/65">The living journal. Photos, reels, and updates.</p>
-                          </div>
-                        </Link>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </section>
                );
@@ -209,20 +199,24 @@ export default async function Home() {
             case "partnersBlock":
               return (
                 <section key={section._key} className="bg-linen px-5 py-24">
-                  <div className="mx-auto max-w-7xl">
-                    {section.heading && <h2 className="mb-12 text-center font-serif text-4xl text-canopy">{section.heading}</h2>}
+                  <div className="mx-auto max-w-5xl text-center">
+                    {section.heading && <h2 className="mb-12 font-serif text-4xl text-canopy">{section.heading}</h2>}
                     {section.partners && section.partners.length > 0 && (
-                      <div className="grid gap-8 border-y border-canopy/15 py-12 md:grid-cols-3 lg:grid-cols-4">
+                      // Removed the borders and reduced top/bottom padding
+                      <div className="flex flex-wrap justify-center gap-16 pt-8">
                         {section.partners.map((partner: any, i: number) => {
-                          const logoUrl = partner.logo ? getImageUrl(partner.logo, "", 400) : null;
+                          // Increased image resolution request to 600px
+                          const logoUrl = partner.logo ? getImageUrl(partner.logo, "", 600) : null;
                           return (
-                            <div key={i} className="text-center">
+                            // Increased max-width of container from 260px to 320px
+                            <div key={i} className="w-full max-w-[320px] text-center">
                               {logoUrl ? (
-                                <img src={logoUrl} alt={partner.name} className="mx-auto h-20 object-contain grayscale opacity-80 transition hover:grayscale-0 hover:opacity-100" />
+                                // Increased height from h-24 to h-32
+                                <img src={logoUrl} alt={partner.name} className="mx-auto h-32 object-contain grayscale opacity-85 transition hover:grayscale-0 hover:opacity-100" />
                               ) : (
-                                <div className="mx-auto flex h-20 items-center justify-center font-serif text-xl font-bold text-canopy/50">{partner.name}</div>
+                                <div className="mx-auto flex h-32 items-center justify-center font-serif text-2xl font-bold text-canopy/60">{partner.name}</div>
                               )}
-                              {partner.description && <p className="mt-4 text-sm text-ink/70">{partner.description}</p>}
+                              {partner.description && <p className="mt-6 text-base leading-relaxed text-ink/75">{partner.description}</p>}
                             </div>
                           );
                         })}

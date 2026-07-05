@@ -25,6 +25,7 @@ export const homePage = defineType({
           title: "Hero Section",
           type: "object",
           fields: [
+            defineField({ name: "kicker", title: "Eyebrow / Location", type: "string", description: "e.g., Sanavalli, Mundgod, Karnataka" }),
             defineField({ name: "heading", title: "Heading", type: "string" }),
             defineField({ name: "subheading", title: "Subheading", type: "text", rows: 2 }),
             defineField({ name: "backgroundImage", title: "Background Image", type: "image", options: { hotspot: true } }),
