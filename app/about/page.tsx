@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { sanityFetch } from "@/lib/sanity";
-import { v2TimelineQuery, v2ResearchQuery, v2TeamQuery } from "@/lib/queries"; // Added v2TeamQuery
+import { v2TimelineQuery, v2ResearchQuery, v2TeamQuery } from "@/lib/queries";
 import { FileText, Download } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -13,8 +13,7 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const timeline = await sanityFetch<any[]>(v2TimelineQuery, {}, []);
   const research = await sanityFetch<any[]>(v2ResearchQuery, {}, []);
-  const team = await sanityFetch<any[]>(v2TeamQuery, {}, []); // Fetched Team Data
-
+  const team = await sanityFetch<any[]>(v2TeamQuery, {}, []);
 
   return (
     <main className="flex min-h-screen flex-col bg-linen">
@@ -106,13 +105,13 @@ export default async function AboutPage() {
               A collective of conservationists, scientists, and creators dedicated to a 100-year horizon.
             </p>
             
-            <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-16 flex flex-wrap justify-center gap-x-10 gap-y-14">
               {team.length === 0 ? (
-                <p className="col-span-full text-center text-ink/60">No team members published yet.</p>
+                <p className="w-full text-center text-ink/60">No team members published yet.</p>
               ) : (
                 team.map((member) => (
-                  <div key={member._id} className="group text-center">
-                    <div className="mx-auto aspect-[3/4] w-full overflow-hidden bg-linen">
+                  <div key={member._id} className="group w-full max-w-[260px] text-center">
+                    <div className="mx-auto aspect-[3/4] w-full overflow-hidden bg-linen shadow-sm">
                       {member.imageUrl ? (
                         <img 
                           src={member.imageUrl} 
@@ -123,8 +122,8 @@ export default async function AboutPage() {
                         <div className="flex h-full w-full items-center justify-center text-sm text-ink/30">No Image</div>
                       )}
                     </div>
-                    <h3 className="mt-6 font-serif text-2xl text-canopy">{member.name}</h3>
-                    <p className="mt-2 text-sm font-semibold tracking-wide text-clay uppercase">{member.role}</p>
+                    <h3 className="mt-7 font-serif text-[26px] leading-tight text-canopy">{member.name}</h3>
+                    <p className="mt-3 text-[11px] font-black tracking-[0.18em] text-clay uppercase leading-relaxed">{member.role}</p>
                   </div>
                 ))
               )}

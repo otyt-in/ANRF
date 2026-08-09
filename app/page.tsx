@@ -1,137 +1,255 @@
-import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { sanityFetch } from "@/lib/sanity";
-import { v2TimelineQuery, v2ResearchQuery, v2TeamQuery } from "@/lib/queries";
-import { FileText, Download } from "lucide-react";
+import { v2HomePageQuery, v2SiteSettingsQuery } from "@/lib/queries";
+import { getImageUrl } from "@/lib/image";
+import { ArrowRight, Play, Youtube, Instagram } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description: "The history, mission, and scientific research of the Aranya Niran Rosewood Foundation.",
+const DEFAULT_IMAGES = {
+  hero: "https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=2200&q=82",
+  longView: "https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78?auto=format&fit=crop&w=1200&q=82",
+  workBg: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=82",
+  rosewood: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=82",
+  social: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=82",
+  video: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=82"
 };
 
-export default async function AboutPage() {
-  const timeline = await sanityFetch<any[]>(v2TimelineQuery, {}, []);
-  const research = await sanityFetch<any[]>(v2ResearchQuery, {}, []);
-  const team = await sanityFetch<any[]>(v2TeamQuery, {}, []);
+export default async function Home() {
+  const data = await sanityFetch<any>(v2HomePageQuery, {}, null);
+  const settings = await sanityFetch<any>(v2SiteSettingsQuery, {}, null);
+  const sections = data?.sections || [];
 
   return (
-    <main className="flex min-h-screen flex-col bg-linen">
-      <SiteHeader />
-      
-      <div className="flex-grow">
-        {/* Narrative Section */}
-        <section className="px-5 py-24">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm uppercase tracking-[0.24em] text-clay">Our Origins</p>
-            <h1 className="mt-4 font-serif text-5xl leading-tight text-canopy md:text-6xl">
-              Rooted in a deep, multi-generational relationship with East Indian Rosewood.
-            </h1>
-          </div>
-          
-          <div className="mx-auto mt-20 grid max-w-6xl gap-12 md:grid-cols-2">
-            <div className="border-t border-canopy/20 pt-6">
-              <h2 className="font-serif text-3xl text-canopy">The Catalyst</h2>
-              <p className="mt-4 text-lg leading-8 text-ink/80">
-                The Aranya Niran Rosewood Foundation blossomed from the heart of Overseas Traders, a third-generation family business supplying acoustic and electric guitar makers globally. Having worked with <em>Dalbergia latifolia</em> for over 40 years, we recognized the urgent need to give back to the species that has given the music world so much.
-              </p>
-            </div>
-            <div className="border-t border-canopy/20 pt-6">
-              <h2 className="font-serif text-3xl text-canopy">CITES & Science</h2>
-              <p className="mt-4 text-lg leading-8 text-ink/80">
-                In 2016, the Dalbergia genus was listed in CITES Appendix II. This pivotal moment revealed a stark scarcity of scientific data regarding the natural regeneration of East Indian Rosewood. Fueled by a profound interest in securing the species' future, we initiated independent field studies and reforestation efforts.
-              </p>
-            </div>
-          </div>
-        </section>
+    <main>
+      <SiteHeader overlay />
 
-        {/* Dynamic Timeline Section */}
-        <section className="bg-white px-5 py-24">
-          <div className="mx-auto max-w-4xl">
-            <h2 className="text-center font-serif text-4xl text-canopy">Timeline & Milestones</h2>
-            <div className="mt-16 grid gap-6">
-              {timeline.length === 0 ? (
-                <p className="text-center text-ink/60">No timeline events published yet.</p>
-              ) : (
-                timeline.map((item) => (
-                  <div key={item._id} className="flex flex-col gap-4 border-b border-canopy/10 pb-6 sm:flex-row sm:items-center sm:gap-10">
-                    <div className="font-serif text-4xl font-bold text-sage sm:w-32">{item.year}</div>
-                    <div className="text-lg text-ink/80">{item.event}</div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
+      {sections.length === 0 ? (
+        <section className="px-5 py-32 text-center text-ink/60">
+          <p className="font-serif text-2xl">The homepage is currently empty.</p>
+          <p className="mt-2 text-sm">Please add sections via the Sanity Studio.</p>
         </section>
-
-        {/* Dynamic Research & Documentation Section */}
-        <section className="texture bg-bone px-5 py-24">
-          <div className="mx-auto max-w-5xl">
-            <h2 className="text-center font-serif text-4xl text-canopy">Research & Documentation</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-ink/70">
-              We believe true conservation is guided by data. Download our independent studies and field reports below.
-            </p>
+      ) : (
+        sections.map((section: any) => {
+          switch (section._type) {
             
-            <div className="mt-16 grid gap-6 md:grid-cols-2">
-              {research.length === 0 ? (
-                <p className="col-span-full text-center text-ink/60">No research reports published yet.</p>
-              ) : (
-                research.map((doc) => (
-                  <a 
-                    key={doc._id} 
-                    href={doc.fileUrl || "#"} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="group flex items-start gap-5 border border-canopy/15 bg-white p-6 transition hover:border-canopy hover:shadow-md"
-                  >
-                    <div className="mt-1 text-clay"><FileText size={28} /></div>
-                    <div className="flex-grow">
-                      <h3 className="font-serif text-2xl text-canopy group-hover:underline">{doc.title}</h3>
-                      {doc.date && <p className="mt-2 text-sm text-ink/60">{new Date(doc.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>}
-                    </div>
-                    <div className="text-canopy/40 transition group-hover:text-canopy"><Download size={20} /></div>
-                  </a>
-                ))
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Dynamic Team Section */}
-        <section className="bg-white px-5 py-24">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="text-center font-serif text-4xl text-canopy">Our Team</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-ink/70">
-              A collective of conservationists, scientists, and creators dedicated to a 100-year horizon.
-            </p>
-            
-            <div className="mt-16 flex flex-wrap justify-center gap-x-10 gap-y-14">
-              {team.length === 0 ? (
-                <p className="w-full text-center text-ink/60">No team members published yet.</p>
-              ) : (
-                team.map((member) => (
-                  <div key={member._id} className="group w-full max-w-[260px] text-center">
-                    <div className="mx-auto aspect-[3/4] w-full overflow-hidden bg-linen shadow-sm">
-                      {member.imageUrl ? (
-                        <img 
-                          src={member.imageUrl} 
-                          alt={member.name} 
-                          className="h-full w-full object-cover grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-sm text-ink/30">No Image</div>
+            case "heroBlock": {
+              const bgUrl = section.backgroundImage ? getImageUrl(section.backgroundImage, "", 2200) : DEFAULT_IMAGES.hero;
+              return (
+                <section key={section._key} className="relative min-h-[94vh] overflow-hidden bg-[#071611] text-white">
+                  <div className="absolute inset-0 scale-[1.02] bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgUrl})` }} />
+                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,22,17,.96),rgba(16,45,34,.58)_44%,rgba(7,22,17,.1)),linear-gradient(0deg,rgba(7,22,17,.98),transparent_42%)]" />
+                  
+                  <div className="relative z-10 mx-auto grid min-h-[94vh] max-w-7xl items-end gap-12 px-5 pb-12 pt-32 lg:grid-cols-[1fr_360px]">
+                    <div>
+                      {section.kicker && (
+                        <p className="mb-5 text-xs font-extrabold uppercase tracking-[0.28em] text-linen/80">{section.kicker}</p>
+                      )}
+                      <h1 className="max-w-5xl font-serif text-5xl leading-[0.98] md:text-8xl">{section.heading}</h1>
+                      {section.subheading && (
+                        <p className="mt-7 max-w-3xl text-lg leading-8 text-linen/90">{section.subheading}</p>
+                      )}
+                      {section.ctas && section.ctas.length > 0 && (
+                        <div className="mt-9 flex flex-wrap gap-3">
+                          {section.ctas.map((cta: any, i: number) => {
+                            const isExternal = cta.url?.startsWith("http");
+                            return (
+                              <Link 
+                                key={i} 
+                                href={cta.url || "#"} 
+                                target={isExternal ? "_blank" : undefined}
+                                rel={isExternal ? "noopener noreferrer" : undefined}
+                                className={`inline-flex min-h-12 items-center gap-2 px-6 text-xs font-extrabold uppercase tracking-widest ${
+                                  cta.isPrimary ? "bg-linen text-canopy" : "border border-white/70 text-white hover:bg-white/10"
+                                }`}
+                              >
+                                {cta.label} {cta.isPrimary && <ArrowRight size={16} />}
+                              </Link>
+                            );
+                          })}
+                        </div>
                       )}
                     </div>
-                    <h3 className="mt-7 font-serif text-[26px] leading-tight text-canopy">{member.name}</h3>
-                    <p className="mt-3 text-[11px] font-black tracking-[0.18em] text-clay uppercase leading-relaxed">{member.role}</p>
+                    {(section.statValue || section.statText) && (
+                      <aside className="border-t border-white/30 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
+                        {section.statValue && <strong className="block font-serif text-6xl leading-none text-sage">{section.statValue}</strong>}
+                        {section.statText && <span className="mt-4 block text-base leading-7 text-linen/80">{section.statText}</span>}
+                      </aside>
+                    )}
                   </div>
-                ))
-              )}
-            </div>
-          </div>
-        </section>
+                </section>
+              );
+            }
 
-      </div>
+            case "modelBlock":
+              return (
+                <section key={section._key} className="bg-linen px-5 py-24">
+                  <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.7fr_1.3fr]">
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.24em] text-clay">The Model</p>
+                      <h2 className="mt-4 font-serif text-5xl leading-none text-canopy md:text-6xl">{section.heading}</h2>
+                    </div>
+                    <div>
+                      {section.body && <p className="text-lg leading-9 text-ink/75">{section.body}</p>}
+                      {section.metrics && section.metrics.length > 0 && (
+                        <div className="mt-12 grid border-y border-canopy/15 md:grid-cols-4">
+                          {section.metrics.map((metric: any, i: number) => (
+                            <div key={i} className="border-b border-canopy/15 p-6 md:border-b-0 md:border-r last:md:border-r-0">
+                              <strong className="block font-serif text-4xl leading-none text-[#6f3024]">{metric.value}</strong>
+                              <span className="mt-3 block text-xs font-extrabold uppercase leading-5 tracking-widest text-ink/60">{metric.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </section>
+              );
+
+            case "workThreadsBlock": {
+              const bgUrl = section.backgroundImage ? getImageUrl(section.backgroundImage, "", 2200) : DEFAULT_IMAGES.workBg;
+              return (
+                <section key={section._key} className="relative overflow-hidden bg-canopy px-5 py-24 text-white">
+                  <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: `url(${bgUrl})` }} />
+                  <div className="relative z-10 mx-auto max-w-7xl">
+                    {section.kicker && <p className="text-xs font-black uppercase tracking-[0.24em] text-linen/75">{section.kicker}</p>}
+                    <h2 className="mt-4 max-w-4xl font-serif text-5xl leading-none md:text-6xl">{section.heading}</h2>
+                    {section.cards && section.cards.length > 0 && (
+                      <div className="mt-12 grid gap-5 lg:grid-cols-2">
+                        {section.cards.map((card: any, i: number) => {
+                           const fallbackCardImg = i === 0 ? DEFAULT_IMAGES.rosewood : DEFAULT_IMAGES.social;
+                           const cardImgUrl = card.image ? getImageUrl(card.image, "", 1200) : fallbackCardImg;
+                           return (
+                            <Link key={i} href={card.url || "#"} className="group relative flex min-h-[430px] overflow-hidden border border-white/20 p-8">
+                              <div className="absolute inset-0 bg-cover bg-center opacity-75 transition duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${cardImgUrl})` }} />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#071611] via-[#071611]/35 to-transparent" />
+                              <div className="relative z-10 mt-auto max-w-xl">
+                                <h3 className="font-serif text-4xl leading-none">{card.title}</h3>
+                                {card.description && <p className="mt-4 text-base leading-7 text-linen/85">{card.description}</p>}
+                              </div>
+                            </Link>
+                           );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </section>
+              );
+            }
+
+            case "imageWithTextBlock": {
+              const imgUrl = section.image ? getImageUrl(section.image, "", 1200) : DEFAULT_IMAGES.longView;
+              return (
+                <section key={section._key} className="bg-white px-5 py-24">
+                  <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[0.85fr_1.15fr]">
+                    <div className="min-h-[440px] border-[18px] border-linen bg-cover bg-center shadow-2xl shadow-canopy/20" style={{ backgroundImage: `url(${imgUrl})` }} />
+                    <div>
+                      {section.kicker && <p className="text-xs font-black uppercase tracking-[0.24em] text-clay">{section.kicker}</p>}
+                      <h2 className="mt-4 font-serif text-5xl leading-none text-canopy md:text-6xl">{section.heading}</h2>
+                      {section.body && <p className="mt-6 text-lg leading-9 text-ink/75">{section.body}</p>}
+                    </div>
+                  </div>
+                </section>
+              );
+            }
+
+            case "videoBlock": {
+               const posterUrl = section.posterImage ? getImageUrl(section.posterImage, "", 1600) : DEFAULT_IMAGES.video;
+               return (
+                <section key={section._key} className="bg-[#071611] px-5 py-24 text-white">
+                  <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+                    <div className="relative aspect-video overflow-hidden bg-black shadow-2xl shadow-black/40">
+                      {section.videoUrl ? (
+                        <iframe className="absolute inset-0 h-full w-full" src={section.videoUrl} allowFullScreen />
+                      ) : (
+                        <>
+                          <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: `url(${posterUrl})` }} />
+                          <div className="absolute inset-0 grid place-items-center">
+                            <div className="grid h-20 w-20 place-items-center rounded-full bg-linen text-canopy"><Play fill="currentColor" size={30} /></div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {section.kicker && <p className="text-xs font-black uppercase tracking-[0.24em] text-linen/75">{section.kicker}</p>}
+                      <h2 className="mt-4 font-serif text-5xl leading-none">{section.heading}</h2>
+                      {section.body && <p className="mt-6 text-lg leading-8 text-linen/80">{section.body}</p>}
+                    </div>
+                  </div>
+                </section>
+               );
+            }
+
+            case "socialBlock":
+               return (
+                <section key={section._key} className="bg-white px-5 py-24">
+                  <div className="mx-auto max-w-4xl text-center">
+                    {section.kicker && <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-clay">{section.kicker}</p>}
+                    <h2 className="font-serif text-5xl leading-none text-canopy">{section.heading}</h2>
+                    {section.body && <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-ink/75">{section.body}</p>}
+                    
+                    {settings?.instagramUrl && (
+                      <div className="mt-12">
+                        <Link href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 border border-canopy/20 bg-linen px-8 py-5 text-canopy transition hover:bg-canopy hover:text-linen">
+                          <Instagram size={24} />
+                          <span className="font-serif text-xl font-medium tracking-wide">Follow the Living Journal</span>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </section>
+               );
+
+            case "partnersBlock":
+              return (
+                <section key={section._key} className="bg-linen px-5 py-24">
+                  <div className="mx-auto max-w-5xl text-center">
+                    {section.heading && <h2 className="mb-12 font-serif text-4xl text-canopy">{section.heading}</h2>}
+                    {section.partners && section.partners.length > 0 && (
+                      <div className="flex flex-wrap justify-center gap-16 pt-8">
+                        {section.partners.map((partner: any, i: number) => {
+                          const logoUrl = partner.logo ? getImageUrl(partner.logo, "", 600) : null;
+                          return (
+                            <div key={i} className="w-full max-w-[320px] text-center">
+                              {logoUrl ? (
+                                <img src={logoUrl} alt={partner.name} className="mx-auto h-32 object-contain grayscale opacity-85 transition hover:grayscale-0 hover:opacity-100" />
+                              ) : (
+                                <div className="mx-auto flex h-32 items-center justify-center font-serif text-2xl font-bold text-canopy/60">{partner.name}</div>
+                              )}
+                              {partner.description && <p className="mt-6 text-base leading-relaxed text-ink/75">{partner.description}</p>}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </section>
+              );
+
+            case "ctaBlock":
+              return (
+                <section key={section._key} className="texture border-t border-canopy/15 bg-bone px-5 py-24">
+                  <div className="mx-auto max-w-4xl text-center">
+                    {section.kicker && <p className="mb-4 text-xs font-black uppercase tracking-[0.24em] text-clay">{section.kicker}</p>}
+                    <h2 className="font-serif text-5xl leading-tight text-canopy md:text-6xl">{section.heading}</h2>
+                    {section.body && <p className="mx-auto mt-6 max-w-2xl text-lg text-ink/75">{section.body}</p>}
+                    {section.buttonUrl && (
+                      <div className="mt-10">
+                        <Link href={section.buttonUrl} className="inline-flex min-h-12 items-center justify-center gap-2 bg-canopy px-8 text-xs font-extrabold uppercase tracking-widest text-linen transition hover:bg-ink">
+                          {section.buttonText || "Get Involved"} <ArrowRight size={16} />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </section>
+              );
+
+            default:
+              return null;
+          }
+        })
+      )}
+
       <SiteFooter />
     </main>
   );
