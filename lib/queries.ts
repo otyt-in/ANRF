@@ -49,3 +49,5 @@ export const v2ProgrammeBySlugQuery = `*[_type == "programme" && slug.current ==
 
 export const v2TimelineQuery = `*[_type == "timeline"] | order(year asc)`;
 export const v2ResearchQuery = `*[_type == "research"] | order(date desc) { _id, title, date, "fileUrl": file.asset->url }`;
+
+export const v2SeoQuery = `*[_type == "seo"][0] { metaTitle, metaDescription, "ogImage": ogImage.asset->url }`;
