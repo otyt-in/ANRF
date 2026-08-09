@@ -35,3 +35,19 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   youtubeUrl,
   instagramUrl
 }`;
+
+
+export const v2SiteSettingsQuery = `*[_type == "siteSettings"][0]`;
+export const v2NavigationQuery = `*[_type == "navigation"][0]`;
+export const v2FooterQuery = `*[_type == "footer"][0]`;
+
+export const v2HomePageQuery = `*[_type == "homePage"][0]{ sections }`;
+
+export const v2ProgrammesQuery = `*[_type == "programme"] | order(_createdAt asc) { title, "slug": slug.current, excerpt }`;
+
+export const v2ProgrammeBySlugQuery = `*[_type == "programme" && slug.current == $slug][0]`;
+
+export const v2TimelineQuery = `*[_type == "timeline"] | order(year asc)`;
+export const v2ResearchQuery = `*[_type == "research"] | order(date desc) { _id, title, date, "fileUrl": file.asset->url }`;
+
+export const v2SeoQuery = `*[_type == "seo"][0] { metaTitle, metaDescription, "ogImage": ogImage.asset->url }`;

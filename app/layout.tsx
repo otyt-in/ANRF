@@ -1,51 +1,37 @@
 import type { Metadata } from "next";
 import { Fraunces, Source_Sans_3 } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { sanityFetch } from "@/lib/sanity";
+import { v2SeoQuery } from "@/lib/queries";
+import { Analytics } from "@vercel/analytics/react";
 
-const fraunces = Fraunces({
+const fraunces = Fraunces({ 
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-fraunces",
   display: "swap",
-  axes: ["SOFT", "WONK"],
 });
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-source-sans",
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://anrf-chi.vercel.app"),
-  title: {
-    default: "Aranya Niran Rosewood Foundation",
-    template: "%s | ANRF",
-  },
-  description:
-    "ANRF conserves East Indian Rosewood and supports rural women around Sanavalli, Mundgod, Karnataka.",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "Aranya Niran Rosewood Foundation",
-    description:
-      "East Indian Rosewood conservation and rural women empowerment around Sanavalli, Mundgod, Karnataka.",
-    url: "https://anrf-chi.vercel.app",
-    siteName: "ANRF",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Aranya Niran Rosewood Foundation",
-    description:
-      "East Indian Rosewood conservation and rural women empowerment around Sanavalli, Mundgod, Karnataka.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch the Global SEO document from Sanity
+  const seo = await sanityFetch<any>(v2SeoQuery, {}, null);
+
+  return {
+    title: {
+      template: "%s | ANRF",
+      default: seo?.metaTitle || "Aranya Niran Rosewood Foundation",
+    },
+    description: seo?.metaDescription || "Conserving East Indian Rosewood and fostering community-driven rural support in Karnataka.",
+    openGraph: {
+      images: seo?.ogImage ? [{ url: seo.ogImage }] : [],
+    },
+  };
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
