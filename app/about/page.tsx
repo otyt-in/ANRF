@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { sanityFetch } from "@/lib/sanity";
-import { v2TimelineQuery, v2ResearchQuery } from "@/lib/queries";
+import { v2TimelineQuery, v2ResearchQuery, v2TeamQuery } from "@/lib/queries"; // Added v2TeamQuery
 import { FileText, Download } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -13,6 +13,8 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const timeline = await sanityFetch<any[]>(v2TimelineQuery, {}, []);
   const research = await sanityFetch<any[]>(v2ResearchQuery, {}, []);
+  const team = await sanityFetch<any[]>(v2TeamQuery, {}, []); // Fetched Team Data
+
 
   return (
     <main className="flex min-h-screen flex-col bg-linen">
@@ -90,6 +92,40 @@ export default async function AboutPage() {
                     </div>
                     <div className="text-canopy/40 transition group-hover:text-canopy"><Download size={20} /></div>
                   </a>
+                ))
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Dynamic Team Section */}
+        <section className="bg-white px-5 py-24">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-center font-serif text-4xl text-canopy">Our Team</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-ink/70">
+              A collective of conservationists, scientists, and creators dedicated to a 100-year horizon.
+            </p>
+            
+            <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {team.length === 0 ? (
+                <p className="col-span-full text-center text-ink/60">No team members published yet.</p>
+              ) : (
+                team.map((member) => (
+                  <div key={member._id} className="group text-center">
+                    <div className="mx-auto aspect-[3/4] w-full overflow-hidden bg-linen">
+                      {member.imageUrl ? (
+                        <img 
+                          src={member.imageUrl} 
+                          alt={member.name} 
+                          className="h-full w-full object-cover grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-sm text-ink/30">No Image</div>
+                      )}
+                    </div>
+                    <h3 className="mt-6 font-serif text-2xl text-canopy">{member.name}</h3>
+                    <p className="mt-2 text-sm font-semibold tracking-wide text-clay uppercase">{member.role}</p>
+                  </div>
                 ))
               )}
             </div>

@@ -51,3 +51,5 @@ export const v2TimelineQuery = `*[_type == "timeline"] | order(year asc)`;
 export const v2ResearchQuery = `*[_type == "research"] | order(date desc) { _id, title, date, "fileUrl": file.asset->url }`;
 
 export const v2SeoQuery = `*[_type == "seo"][0] { metaTitle, metaDescription, "ogImage": ogImage.asset->url }`;
+
+export const v2TeamQuery = `*[_type == "teamMember"] | order(order asc) { _id, name, role, "imageUrl": image.asset->url }`;
