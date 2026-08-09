@@ -3,6 +3,7 @@ import { Fraunces, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { sanityFetch } from "@/lib/sanity";
 import { v2SeoQuery } from "@/lib/queries";
+import { Analytics } from "@vercel/analytics/react";
 
 const fraunces = Fraunces({ 
   subsets: ["latin"],
