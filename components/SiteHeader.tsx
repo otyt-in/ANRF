@@ -1,10 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { sanityFetch } from "@/lib/sanity";
 import { v2NavigationQuery } from "@/lib/queries";
 
-export async function SiteHeader({ overlay = false }: { overlay?: boolean }) {
-  const navData = await sanityFetch<any>(v2NavigationQuery, {}, null);
-  const links = navData?.links || [];
+export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
+  const [links, setLinks] = useState<any[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    async function fetchNav() {
+      const navData = await sanityFetch<any>(v2NavigationQuery, {}, null);
+      if (navData?.links) {
+        setLinks(navData.links);
+      }
+    }
+    fetchNav();
+  }, []);
 
   return (
     <header className={`absolute left-0 right-0 top-0 z-50 flex min-h-24 items-center px-5 ${overlay ? "text-white" : "bg-linen text-canopy border-b border-canopy/10"}`}>
@@ -16,32 +29,47 @@ export async function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-8 md:flex">
-          {links.map((link: any) => (
-            <Link key={link._key} href={link.url || "#"} className="text-xs font-extrabold uppercase tracking-widest hover:opacity-70">
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link: any) => {
+            const targetPath = link.url || link.href || "#";
+            return (
+              <Link key={link._key} href={targetPath} scroll={true} className="text-xs font-extrabold uppercase tracking-widest hover:opacity-70">
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Mobile Nav (Pure CSS Toggle) */}
+        {/* Mobile Nav Toggle */}
         <div className="md:hidden">
-          <input type="checkbox" id="mobile-menu" className="peer hidden" />
-          
-          <label htmlFor="mobile-menu" className="relative z-50 block cursor-pointer text-xs font-extrabold uppercase tracking-widest">
-            Menu
-          </label>
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="relative z-50 block cursor-pointer text-xs font-extrabold uppercase tracking-widest"
+          >
+            {menuOpen ? "Close" : "Menu"}
+          </button>
 
           {/* Full Screen Mobile Dropdown */}
-          <div className="fixed inset-0 -z-10 hidden h-screen w-full flex-col bg-[#071611] px-5 pt-32 text-white peer-checked:flex">
-             <div className="flex flex-col gap-8">
-                <Link href="/" className="border-b border-white/10 pb-4 font-serif text-3xl">Home</Link>
-                {links.map((link: any) => (
-                  <Link key={link._key} href={link.url || "#"} className="border-b border-white/10 pb-4 font-serif text-3xl">
-                    {link.label}
-                  </Link>
-                ))}
-             </div>
-          </div>
+          {menuOpen && (
+            <div className="fixed inset-0 -z-10 flex h-screen w-full flex-col bg-[#071611] px-5 pt-32 text-white">
+               <div className="flex flex-col gap-8">
+                  <Link href="/" onClick={() => setMenuOpen(false)} className="border-b border-white/10 pb-4 font-serif text-3xl">Home</Link>
+                  {links.map((link: any) => {
+                    const targetPath = link.url || link.href || "#";
+                    return (
+                      <Link 
+                        key={link._key} 
+                        href={targetPath} 
+                        scroll={true}
+                        onClick={() => setMenuOpen(false)}
+                        className="border-b border-white/10 pb-4 font-serif text-3xl"
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
+               </div>
+            </div>
+          )}
         </div>
       </div>
     </header>

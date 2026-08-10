@@ -22,7 +22,7 @@ export default async function WorkPage() {
       <SiteHeader />
       
       <div className="flex-grow">
-        <section className="texture px-5 py-24">
+        <section className="px-5 pt-48 pb-24">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.24em] text-clay">What we do</p>
             <h1 className="mt-4 max-w-4xl font-serif text-5xl leading-tight text-canopy md:text-6xl">

@@ -9,7 +9,6 @@ export async function SiteFooter() {
 
   const links = navData?.links || [];
   
-  // Updated fallback text for broader community support
   const description = footerData?.description || "Aranya Niran Rosewood Foundation conserves East Indian Rosewood and fosters community-driven rural support and empowerment around Sanavalli, Mundgod, Karnataka.";
   
   const location = settingsData?.location || "Sanavalli, Mundgod, Karnataka, India";
@@ -30,9 +29,14 @@ export async function SiteFooter() {
         <div>
           <p className="text-xs font-black uppercase tracking-[0.22em] text-sage">Explore</p>
           <div className="mt-5 grid gap-3 text-sm text-linen/75">
-            {links.map((link: any) => (
-              <Link key={link._key} href={link.url || "#"} className="hover:text-white transition-colors">{link.label}</Link>
-            ))}
+            {links.map((link: any) => {
+              const targetPath = link.url || link.href || "#";
+              return (
+                <Link key={link._key} href={targetPath} scroll={true} className="hover:text-white transition-colors">
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
 

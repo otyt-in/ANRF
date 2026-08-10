@@ -21,7 +21,7 @@ export default async function AboutPage() {
       
       <div className="flex-grow">
         {/* Narrative Section */}
-        <section className="px-5 py-24">
+        <section className="px-5 pt-48 pb-24">
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm uppercase tracking-[0.24em] text-clay">Our Origins</p>
             <h1 className="mt-4 font-serif text-5xl leading-tight text-canopy md:text-6xl">

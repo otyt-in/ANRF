@@ -10,12 +10,19 @@ import { v2ProgrammeBySlugQuery, v2SiteSettingsQuery } from "@/lib/queries";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const programme = await sanityFetch<any>(v2ProgrammeBySlugQuery, { slug }, null);
+  
   if (!programme) return { title: "Programme Not Found" };
-  return { title: programme.title, description: programme.excerpt };
+  
+  return { 
+    title: programme.title, 
+    description: programme.excerpt 
+  };
 }
 
 export default async function ProgrammePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  
+  // Fetch the specific programme by its URL slug, and global settings for the footer CTA
   const programme = await sanityFetch<any>(v2ProgrammeBySlugQuery, { slug }, null);
   const settings = await sanityFetch<any>(v2SiteSettingsQuery, {}, null);
 
@@ -29,51 +36,62 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
 
       <div className="flex-grow">
         {/* V1 Green Hero Section */}
-        <section className="bg-canopy px-5 py-24 text-white">
+        <section className="bg-canopy px-5 pt-48 pb-24 text-white">
           <div className="mx-auto max-w-5xl">
-            <p className="text-sm uppercase tracking-[0.24em] text-linen/70">{programme.heroKicker || "Programme"}</p>
-            <h1 className="mt-4 font-serif text-5xl leading-tight md:text-6xl">{programme.heroHeading || programme.title}</h1>
+            <p className="text-sm uppercase tracking-[0.24em] text-linen/70">
+              {programme.heroKicker || "Programme"}
+            </p>
+            <h1 className="mt-4 font-serif text-5xl leading-tight md:text-6xl">
+              {programme.heroHeading || programme.title}
+            </h1>
           </div>
         </section>
 
         {/* Dynamic V1 Smart Blocks */}
-        {blocks.map((block: any, index: number) => {
-           
-           if (block._type === "gridBlock") {
-             return (
-               <section key={index} className="mx-auto grid max-w-6xl gap-8 px-5 py-16 md:grid-cols-3">
-                 {block.items?.map((item: any, i: number) => (
-                   <article key={i} className="bg-white p-6 shadow-sm">
-                     <h2 className="font-serif text-3xl text-canopy">{item.title}</h2>
-                     <p className="mt-4 text-sm leading-7 text-ink/75">{item.copy}</p>
-                   </article>
-                 ))}
-               </section>
-             );
-           }
+        {blocks.length === 0 ? (
+           <div className="py-24 text-center text-ink/60">No content blocks published for this programme yet.</div>
+        ) : (
+          blocks.map((block: any, index: number) => {
+             
+             // 1. The 3-Column Grid Block (Used for Rosewood Conservation Stats)
+             if (block._type === "gridBlock") {
+               return (
+                 <section key={index} className="mx-auto grid max-w-6xl gap-8 px-5 py-16 md:grid-cols-3">
+                   {block.items?.map((item: any, i: number) => (
+                     <article key={i} className="bg-white p-6 shadow-sm">
+                       <h2 className="font-serif text-3xl text-canopy">{item.title}</h2>
+                       <p className="mt-4 text-sm leading-7 text-ink/75">{item.copy}</p>
+                     </article>
+                   ))}
+                 </section>
+               );
+             }
 
-           if (block._type === "badgeBlock") {
-             return (
-               <section key={index} className="mx-auto max-w-4xl px-5 py-16 text-base leading-8 text-ink/78">
-                 <div className="mb-10 flex flex-col gap-5 border border-canopy/15 bg-white p-6 sm:flex-row sm:items-center">
-                   <div className="grid h-24 w-24 shrink-0 place-items-center rounded-full bg-[#f3d7cd] font-serif text-3xl text-[#6f3024]">
-                     {block.badgeInitials || "NN"}
+             // 2. The Badge & Text Block (Used for the Naya Nari layout)
+             if (block._type === "badgeBlock") {
+               return (
+                 <section key={index} className="mx-auto max-w-4xl px-5 py-16 text-base leading-8 text-ink/78">
+                   <div className="mb-10 flex flex-col gap-5 border border-canopy/15 bg-white p-6 sm:flex-row sm:items-center">
+                     <div className="grid h-24 w-24 shrink-0 place-items-center rounded-full bg-[#f3d7cd] font-serif text-3xl text-[#6f3024]">
+                       {block.badgeInitials || "NN"}
+                     </div>
+                     <div>
+                       <p className="text-xs font-black uppercase tracking-[0.22em] text-clay">Initiative identity</p>
+                       <h2 className="mt-2 font-serif text-3xl leading-none text-canopy">{block.badgeTitle}</h2>
+                       <p className="mt-3 text-sm leading-6 text-ink/70">{block.badgeSubtitle}</p>
+                     </div>
                    </div>
-                   <div>
-                     <p className="text-xs font-black uppercase tracking-[0.22em] text-clay">Initiative identity</p>
-                     <h2 className="mt-2 font-serif text-3xl leading-none text-canopy">{block.badgeTitle}</h2>
-                     <p className="mt-3 text-sm leading-6 text-ink/70">{block.badgeSubtitle}</p>
+                   
+                   <div className="prose prose-lg prose-p:text-ink/80 max-w-none">
+                     {block.body && <PortableText value={block.body} />}
                    </div>
-                 </div>
-                 <div className="prose prose-lg prose-p:text-ink/80 max-w-none">
-                   {block.body && <PortableText value={block.body} />}
-                 </div>
-               </section>
-             );
-           }
+                 </section>
+               );
+             }
 
-           return null;
-        })}
+             return null;
+          })
+        )}
 
         {/* Upgraded Instagram CTA */}
         {settings?.instagramUrl && (

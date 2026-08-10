@@ -19,7 +19,7 @@ export default async function ContactPage() {
     <main className="flex min-h-screen flex-col bg-linen">
       <SiteHeader />
       
-      <div className="flex-grow px-5 py-24">
+      <div className="flex-grow px-5 pt-48 pb-24">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-clay">Get in touch</p>
           <h1 className="mt-4 font-serif text-5xl leading-tight text-canopy md:text-7xl">Connect with the foundation.</h1>
