@@ -54,6 +54,7 @@ export default async function ContactPage() {
                 To discuss funding a pilot plot, supporting our nursery capacity, or contributing to Naya Nari, please contact our team directly.
               </p>
               <div className="mt-10">
+                {/* Fixed standard anchor tag for mailto link */}
                 <a href={`mailto:${email}?subject=Support and Donations`} className="inline-flex min-h-12 items-center justify-center gap-2 bg-linen px-8 text-xs font-extrabold uppercase tracking-widest text-canopy transition hover:bg-white">
                   Discuss Support
                 </a>
