@@ -3,38 +3,47 @@ import { sanityFetch } from "@/lib/sanity";
 import { v2NavigationQuery } from "@/lib/queries";
 
 export async function SiteHeader({ overlay = false }: { overlay?: boolean }) {
-  // Fetch dynamic navigation links from Sanity
   const navData = await sanityFetch<any>(v2NavigationQuery, {}, null);
   const links = navData?.links || [];
 
   return (
-    <header
-      className={
-        overlay
-          ? "absolute left-0 right-0 top-0 z-30 bg-gradient-to-b from-[#071611]/85 via-[#071611]/20 to-transparent"
-          : "sticky top-0 z-30 border-b border-canopy/10 bg-linen/95 backdrop-blur"
-      }
-    >
-      <nav className={`mx-auto flex max-w-7xl items-center justify-between px-5 py-5 ${overlay ? "text-white" : "text-canopy"}`}>
-        <Link href="/" className="flex flex-col leading-none">
-          <span className="font-serif text-2xl font-semibold">ANRF</span>
-          <span className={`mt-1 hidden text-[10px] font-bold uppercase tracking-[0.18em] md:block ${overlay ? "text-linen/75" : "text-canopy/65"}`}>
-            Aranya Niran Rosewood Foundation
-          </span>
+    <header className={`absolute left-0 right-0 top-0 z-50 flex min-h-24 items-center px-5 ${overlay ? "text-white" : "bg-linen text-canopy border-b border-canopy/10"}`}>
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="font-serif text-2xl font-bold tracking-wide">
+          ANRF
         </Link>
-        <div className="hidden gap-7 text-xs font-bold uppercase tracking-widest md:flex">
-          {links.length > 0 ? (
-            links.map((link: any) => (
-              <Link key={link.href} href={link.href}>
-                {link.label}
-              </Link>
-            ))
-          ) : (
-            // Temporary fallback if Sanity is empty
-            <span className="opacity-50">Setup Navigation in CMS</span>
-          )}
+
+        {/* Desktop Nav */}
+        <nav className="hidden items-center gap-8 md:flex">
+          {links.map((link: any) => (
+            <Link key={link._key} href={link.url} className="text-xs font-extrabold uppercase tracking-widest hover:opacity-70">
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Mobile Nav (Pure CSS Toggle) */}
+        <div className="md:hidden">
+          <input type="checkbox" id="mobile-menu" className="peer hidden" />
+          
+          <label htmlFor="mobile-menu" className="relative z-50 block cursor-pointer text-xs font-extrabold uppercase tracking-widest">
+            Menu
+          </label>
+
+          {/* Full Screen Mobile Dropdown */}
+          <div className="fixed inset-0 -z-10 hidden h-screen w-full flex-col bg-[#071611] px-5 pt-32 text-white peer-checked:flex">
+             <div className="flex flex-col gap-8">
+                <Link href="/" className="border-b border-white/10 pb-4 font-serif text-3xl">Home</Link>
+                {links.map((link: any) => (
+                  <Link key={link._key} href={link.url} className="border-b border-white/10 pb-4 font-serif text-3xl">
+                    {link.label}
+                  </Link>
+                ))}
+             </div>
+          </div>
         </div>
-      </nav>
+      </div>
     </header>
   );
 }
