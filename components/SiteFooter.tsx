@@ -8,7 +8,10 @@ export async function SiteFooter() {
   const navData = await sanityFetch<any>(v2NavigationQuery, {}, null);
 
   const links = navData?.links || [];
-  const description = footerData?.description || "Aranya Niran Rosewood Foundation conserves East Indian Rosewood and fosters community-driven rural support around Sanavalli, Mundgod, Karnataka.";
+  
+  // Updated fallback text for broader community support
+  const description = footerData?.description || "Aranya Niran Rosewood Foundation conserves East Indian Rosewood and fosters community-driven rural support and empowerment around Sanavalli, Mundgod, Karnataka.";
+  
   const location = settingsData?.location || "Sanavalli, Mundgod, Karnataka, India";
 
   return (
@@ -28,7 +31,7 @@ export async function SiteFooter() {
           <p className="text-xs font-black uppercase tracking-[0.22em] text-sage">Explore</p>
           <div className="mt-5 grid gap-3 text-sm text-linen/75">
             {links.map((link: any) => (
-              <Link key={link.href} href={link.href} className="hover:text-white transition-colors">{link.label}</Link>
+              <Link key={link._key} href={link.url || "#"} className="hover:text-white transition-colors">{link.label}</Link>
             ))}
           </div>
         </div>
@@ -37,10 +40,10 @@ export async function SiteFooter() {
           <p className="text-xs font-black uppercase tracking-[0.22em] text-sage">Connect</p>
           <div className="mt-5 grid gap-3 text-sm text-linen/75">
             {settingsData?.instagramUrl && (
-              <Link href={settingsData.instagramUrl} target="_blank" className="hover:text-white transition-colors">Instagram</Link>
+              <Link href={settingsData.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</Link>
             )}
             {settingsData?.youtubeUrl && (
-              <Link href={settingsData.youtubeUrl} target="_blank" className="hover:text-white transition-colors">YouTube</Link>
+              <Link href={settingsData.youtubeUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">YouTube</Link>
             )}
             <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
           </div>

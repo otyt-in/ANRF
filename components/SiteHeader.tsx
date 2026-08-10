@@ -17,7 +17,7 @@ export async function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-8 md:flex">
           {links.map((link: any) => (
-            <Link key={link._key} href={link.url} className="text-xs font-extrabold uppercase tracking-widest hover:opacity-70">
+            <Link key={link._key} href={link.url || "#"} className="text-xs font-extrabold uppercase tracking-widest hover:opacity-70">
               {link.label}
             </Link>
           ))}
@@ -36,7 +36,7 @@ export async function SiteHeader({ overlay = false }: { overlay?: boolean }) {
              <div className="flex flex-col gap-8">
                 <Link href="/" className="border-b border-white/10 pb-4 font-serif text-3xl">Home</Link>
                 {links.map((link: any) => (
-                  <Link key={link._key} href={link.url} className="border-b border-white/10 pb-4 font-serif text-3xl">
+                  <Link key={link._key} href={link.url || "#"} className="border-b border-white/10 pb-4 font-serif text-3xl">
                     {link.label}
                   </Link>
                 ))}
