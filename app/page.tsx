@@ -178,7 +178,10 @@ export default async function Home() {
             }
 
           case "videoBlock":
-            const embedUrl = getYouTubeEmbedUrl(section.url);
+            // Safely check for the URL regardless of what it's named in Sanity
+            const rawUrl = section.url || section.videoUrl || section.link || "";
+            const embedUrl = getYouTubeEmbedUrl(rawUrl);
+
             return (
               <section key={section._key} className="py-24 bg-stone-900 text-stone-100">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -187,14 +190,34 @@ export default async function Home() {
                     {section.heading && <h2 className="text-3xl md:text-5xl font-serif text-white mb-6">{section.heading}</h2>}
                     {section.body && <p className="text-stone-300 text-lg md:text-xl leading-relaxed">{section.body}</p>}
                   </div>
-                  <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
-                    <iframe
-                      src={embedUrl}
-                      title="YouTube video player"
-                      className="w-full h-full border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    ></iframe>
+                  
+                  <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-2xl flex items-center justify-center">
+                    
+                    {/* 1. Show the Poster Image if one was uploaded */}
+                    {section.image && (
+                      <img 
+                        // Note: If you have a Sanity urlFor helper, you might need: src={urlFor(section.image).url()}
+                        src={section.image.asset?.url || section.image} 
+                        alt="Video Poster"
+                        className="absolute inset-0 w-full h-full object-cover z-0"
+                      />
+                    )}
+
+                    {/* 2. Show the YouTube Video (this will sit on top of the poster image) */}
+                    {embedUrl ? (
+                      <iframe
+                        src={embedUrl}
+                        title="YouTube video player"
+                        className="absolute inset-0 w-full h-full border-0 z-10"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      ></iframe>
+                    ) : (
+                      <div className="z-20 text-stone-400 bg-black/70 px-4 py-2 rounded">
+                        No valid YouTube URL provided.
+                      </div>
+                    )}
+                    
                   </div>
                 </div>
               </section>
