@@ -178,14 +178,14 @@ export default async function Home() {
             }
 
           case "videoBlock":
-            const embedUrl = getYouTubeEmbedUrl(block.url);
+            const embedUrl = getYouTubeEmbedUrl(section.url);
             return (
-              <section key={block._key} className="py-24 bg-stone-900 text-stone-100">
+              <section key={section._key} className="py-24 bg-stone-900 text-stone-100">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                   <div className="text-center max-w-3xl mx-auto mb-16">
-                    {block.kicker && <p className="text-stone-400 uppercase tracking-widest text-sm font-bold mb-4">{block.kicker}</p>}
-                    {block.heading && <h2 className="text-3xl md:text-5xl font-serif text-white mb-6">{block.heading}</h2>}
-                    {block.body && <p className="text-stone-300 text-lg md:text-xl leading-relaxed">{block.body}</p>}
+                    {section.kicker && <p className="text-stone-400 uppercase tracking-widest text-sm font-bold mb-4">{section.kicker}</p>}
+                    {section.heading && <h2 className="text-3xl md:text-5xl font-serif text-white mb-6">{section.heading}</h2>}
+                    {section.body && <p className="text-stone-300 text-lg md:text-xl leading-relaxed">{section.body}</p>}
                   </div>
                   <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
                     <iframe
