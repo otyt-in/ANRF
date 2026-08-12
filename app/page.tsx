@@ -6,6 +6,30 @@ import { v2HomePageQuery, v2SiteSettingsQuery } from "@/lib/queries";
 import { getImageUrl } from "@/lib/image";
 import { ArrowRight, Play, Youtube, Instagram } from "lucide-react";
 
+
+
+// Helper function to extract YouTube ID and return the secure embed URL
+function getYouTubeEmbedUrl(url: string) {
+  if (!url) return '';
+  // If it's already an embed URL, return it as-is
+  if (url.includes('youtube.com/embed/')) return url;
+  
+  let videoId = '';
+  // Handle "youtu.be" short links
+  if (url.includes('youtu.be/')) {
+    videoId = url.split('youtu.be/')[1]?.split('?')[0];
+  } 
+  // Handle standard "youtube.com/watch" links
+  else if (url.includes('youtube.com/watch')) {
+    const urlParams = new URLSearchParams(url.split('?')[1]);
+    videoId = urlParams.get('v') || '';
+  }
+  
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+}
+
+
+
 const DEFAULT_IMAGES = {
   hero: "https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=2200&q=82",
   longView: "https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78?auto=format&fit=crop&w=1200&q=82",
@@ -153,32 +177,28 @@ export default async function Home() {
               );
             }
 
-            case "videoBlock": {
-               const posterUrl = section.posterImage ? getImageUrl(section.posterImage, "", 1600) : DEFAULT_IMAGES.video;
-               return (
-                <section key={section._key} className="bg-[#071611] px-5 py-24 text-white">
-                  <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-                    <div className="relative aspect-video overflow-hidden bg-black shadow-2xl shadow-black/40">
-                      {section.videoUrl ? (
-                        <iframe className="absolute inset-0 h-full w-full" src={section.videoUrl} allowFullScreen />
-                      ) : (
-                        <>
-                          <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: `url(${posterUrl})` }} />
-                          <div className="absolute inset-0 grid place-items-center">
-                            <div className="grid h-20 w-20 place-items-center rounded-full bg-linen text-canopy"><Play fill="currentColor" size={30} /></div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                    <div>
-                      {section.kicker && <p className="text-xs font-black uppercase tracking-[0.24em] text-linen/75">{section.kicker}</p>}
-                      <h2 className="mt-4 font-serif text-5xl leading-none">{section.heading}</h2>
-                      {section.body && <p className="mt-6 text-lg leading-8 text-linen/80">{section.body}</p>}
-                    </div>
+          case "videoBlock":
+            const embedUrl = getYouTubeEmbedUrl(block.url);
+            return (
+              <section key={block._key} className="py-24 bg-stone-900 text-stone-100">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="text-center max-w-3xl mx-auto mb-16">
+                    {block.kicker && <p className="text-stone-400 uppercase tracking-widest text-sm font-bold mb-4">{block.kicker}</p>}
+                    {block.heading && <h2 className="text-3xl md:text-5xl font-serif text-white mb-6">{block.heading}</h2>}
+                    {block.body && <p className="text-stone-300 text-lg md:text-xl leading-relaxed">{block.body}</p>}
                   </div>
-                </section>
-               );
-            }
+                  <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
+                    <iframe
+                      src={embedUrl}
+                      title="YouTube video player"
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </div>
+              </section>
+            );
 
             case "socialBlock":
                return (
