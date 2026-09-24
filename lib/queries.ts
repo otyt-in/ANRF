@@ -47,7 +47,14 @@ export const v2ProgrammesQuery = `*[_type == "programme"] | order(_createdAt asc
 
 export const v2ProgrammeBySlugQuery = `*[_type == "programme" && slug.current == $slug][0]`;
 
-export const v2TimelineQuery = `*[_type == "timeline"] | order(year asc)`;
+export const v2TimelineQuery = `*[_type == "timelineEvent"] | order(date asc) {
+  _id,
+  title,
+  description,
+  date
+}`;
+
+
 export const v2ResearchQuery = `*[_type == "research"] | order(date desc) { _id, title, date, "fileUrl": file.asset->url }`;
 
 export const v2SeoQuery = `*[_type == "seo"][0] { metaTitle, metaDescription, "ogImage": ogImage.asset->url }`;
