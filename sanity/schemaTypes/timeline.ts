@@ -1,11 +1,37 @@
-import { defineField, defineType } from "sanity";
+import { defineField, defineType } from 'sanity';
+
 export const timeline = defineType({
-  name: "timeline",
-  title: "Timeline Event",
-  type: "document",
+  name: 'timelineEvent',
+  title: 'Timeline Event',
+  type: 'document',
   fields: [
-    defineField({ name: "year", title: "Year", type: "string", validation: (Rule) => Rule.required() }),
-    defineField({ name: "event", title: "Event", type: "string" }),
+    defineField({
+      name: 'date',
+      title: 'Date (Required)',
+      description: 'Pick any day in the month. The website will mathematically sort by this date but only display the Month and Year.',
+      type: 'date',
+      options: {
+        dateFormat: 'YYYY-MM',
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'title',
+      title: 'Event Title',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      validation: (Rule) => Rule.required(),
+    }),
   ],
-  preview: { select: { title: "event", subtitle: "year" } },
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'date',
+    },
+  },
 });
